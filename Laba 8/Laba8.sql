@@ -4,6 +4,8 @@
 -- find / -name sqlnet.ora 2>/dev/null
 -- cat /u01/app/oracle/product/12.2.0/dbhome_1/admin/ORCLCDB/sqlnet.ora (после cat тот путь, который выдала первая команда, можно ещё vi)
 -- cat /u01/app/oracle/product/12.2.0/dbhome_1/network/admin/samples/tnsnames.ora
+
+--vi  /u01/app/oracle/product/12.2.0/dbhome_1/admin/ORCLCDB/tnsnames.ora
 -- Задание 2 --
 -- show parameter instance
 -- Задание 3 --

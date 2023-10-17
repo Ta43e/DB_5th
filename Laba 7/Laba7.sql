@@ -6,7 +6,7 @@ SELECT NAME, DESCRIPTION FROM V$BGPROCESS WHERE PADDR != '00' order by NAME;
 -- Задание 3 --
 SELECT COUNT(*) FROM V$BGPROCESS WHERE PADDR != '00' AND NAME LIKE 'DBW%';
 -- Задание 4 --
-SELECT * FROM V$SESSION ; --is not null ;
+SELECT * FROM V$SESSION where  USERNAME is not null; --is not null ;
 -- Задание 5 --
 SELECT USERNAME, SERVER FROM V$SESSION WHERE USERNAME IS NOT NULL;
 -- Задание №6

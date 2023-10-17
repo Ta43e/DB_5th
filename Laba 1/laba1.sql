@@ -41,4 +41,7 @@ select *
 from KOD_t right join KOD_t1 on KOD_t.x = KOD_t1.id;
 
 select *
-from  KOD_t full join KOD_t1 on KOD_t.x = KOD_t1.id
+from  KOD_t full join KOD_t1 on KOD_t.x = KOD_t1.id;
+
+drop TABLE KOD_t;
+drop TABLE KOD_t1;

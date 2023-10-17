@@ -1,7 +1,11 @@
 alter session set "_ORACLE_SCRIPT" = true;
+
+
+
+alter pluggable database KOD_PDB open;
 -- Задание №1 --
 SELECT name, open_mode FROM v$pdbs;
-SELECT pdb_name, pdb_id, status FROM SYS.dba_pdbs;
+    SELECT pdb_name, pdb_id, status FROM SYS.dba_pdbs;
 
 -- Задание №2 --
 SELECT * FROM v$instance;
@@ -22,13 +26,13 @@ SELECT name FROM v$pdbs;
 
 -- Задание №6 (Это уже на PDB)
 CREATE TABLESPACE TS_KOD
-DATAFILE 'D:\УНИК\Семестр 5\Базы данных\Laba 4\TS_PDB.dbf'
+DATAFILE 'TS_PDB.dbf'
 SIZE 7M
 AUTOEXTEND ON NEXT 5M
 MAXSIZE 30M;
 
 CREATE TEMPORARY TABLESPACE TS_KOD_TEMP
-TEMPFILE 'D:\УНИК\Семестр 5\Базы данных\Laba 4\TS_PDB_TEMP.dbf'
+TEMPFILE 'TS_PDB_TEMP.dbf'
 SIZE 5M
 AUTOEXTEND ON NEXT 3M
 MAXSIZE 30M;
@@ -61,6 +65,8 @@ create  table  KOD_TABLE (
     Age number
 );
 
+
+
 INSERT INTO KOD_TABLE (Name, Age) VALUES ('Олег', 19);
 INSERT INTO KOD_TABLE (Name, Age) VALUES ('Илья', 19);
 INSERT INTO KOD_TABLE (Name, Age) VALUES ('Кирилл', 20);
@@ -79,11 +85,7 @@ SELECT USERNAME, GRANTED_ROLE FROM DBA_USERS JOIN DBA_ROLE_PRIVS ON USERNAME = G
 
 -- Задани 9 --
 
-CREATE USER C##KOD IDENTIFIED BY 123456
-ACCOUNT UNLOCK;
-
-GRANT CREATE SESSION TO C##KOD;
-DROP USER  C##KOD;
+-- В файле
 
 -- Задание №11
 SELECT * FROM v$session WHERE username IS NOT NULL;
@@ -93,5 +95,9 @@ SELECT *  FROM DBA_DATA_FILES;
 
 -- Задание №13
 ALTER PLUGGABLE DATABASE KOD_PDB CLOSE IMMEDIATE;
-DROP PLUGGABLE DATABASE  KOD_PDB;
+DROP PLUGGABLE DATABASE  KOD_PDB ;
 DROP USER C##KOD;
+
+
+
+DROP TABLE  KOD_TABLE;
