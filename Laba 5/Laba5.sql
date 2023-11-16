@@ -74,7 +74,7 @@ shutdown immediate;
 startup;
 SHOW PARAMETER log_buffer*/
 
-
+CONNECT system/Oracle_db1@KOD_PDB as sysdba;
 
 
 

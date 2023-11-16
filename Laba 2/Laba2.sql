@@ -65,7 +65,6 @@ ALTER USER KODCORE QUOTA 2M ON KOD_QDATA;
 
 INSERT INTO KODCORE.Products (NameProduct, Cost) VALUES ('Яйцо', 10);
 INSERT INTO KODCORE.Products (NameProduct, Cost) VALUES ('Дыня', 1);
-INSERT INTO KODCORE.Products (NameProduct, Cost) VALUE
     S ('Хлеб', 20);
 commit ;
 
