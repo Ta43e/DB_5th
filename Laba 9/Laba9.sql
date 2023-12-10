@@ -68,15 +68,20 @@ declare
     b2 boolean;
     b3 boolean;
     n integer;
-    begin
-    update TEACHER SET TEACHER = 'КОД' WHERE TEACHER = 'КЗК';
 
+    NAME_RET TEACHER.TEACHER%type;
+    begin
+    update TEACHER SET TEACHER = 'КЗК' WHERE TEACHER = 'КОД'
+    RETURNING TEACHER INTO  NAME_RET;
+    DBMS_OUTPUT.PUT_LINE(NAME_RET);
+/*commit ;*/
+/*rollback ;*/
     b1 := sql%found;
     b2 := sql%isopen;
     b3 := sql%notfound;
     n := sql%rowcount;
-commit ;
---rollback ;
+/*commit ;*/
+rollback ;
     if b1 then     DBMS_OUTPUT.PUT_LINE('b1 = true');
     else     DBMS_OUTPUT.PUT_LINE('b1 = false');
 end if;
@@ -167,7 +172,7 @@ end if;
 end if;
         DBMS_OUTPUT.PUT_LINE(n);
 
-    --rollback ;
+    rollback ;
 /*    commit ;*/
     exception
         when others
@@ -178,7 +183,7 @@ select * from TEACHER;
 delete from TEACHER where TEACHER like '%WWW%';
 ROLLBACK ;
 
---- 9-10 ---- 10 ХЗ
+--- 9-10 ----
 
 declare
     b1 boolean;
@@ -207,7 +212,7 @@ end if;
 end if;
         DBMS_OUTPUT.PUT_LINE(n);
 
-    --rollback ;
+    rollback ;
     exception
         when others
        then DBMS_OUTPUT.PUT_LINE('error' || sqlerrm || ' ' || sqlcode);
@@ -260,22 +265,29 @@ begin
 end;
 --- 13 ---- YES
 declare
-    cursor RESULT_JOIN_PULPIT_AND_TEACHER is select PULPIT_NAME, TEACHER_NAME from PULPIT join DB_USER.TEACHER T on PULPIT.PULPIT = T.PULPIT;
+    cursor RESULT_JOIN_PULPIT_AND_TEACHER is select PULPIT_NAME, TEACHER_NAME from PULPIT
+                                          join DB_USER.TEACHER T on PULPIT.PULPIT = T.PULPIT;
     RECORD RESULT_JOIN_PULPIT_AND_TEACHER%ROWTYPE;
 begin
 
-/*OPEN RESULT_JOIN_PULPIT_AND_TEACHER;*/
     FOR RECORD IN RESULT_JOIN_PULPIT_AND_TEACHER
     LOOP
         DBMS_OUTPUT.PUT_LINE(
                         ' ' || RECORD.PULPIT_NAME ||
                         ' ' || RECORD.TEACHER_NAME);
         end loop;
-/*    CLOSE RESULT_JOIN_PULPIT_AND_TEACHER;*/
     EXCEPTION
         WHEN OTHERS
             THEN DBMS_OUTPUT.PUT_LINE(SQLERRM);
 end;
+
+
+declare
+        n int := (select max(AUDITORIUM_CAPACITY) from AUDITORIUM);
+    begin
+    DBMS_OUTPUT.PUT_LINE(n);
+end;
+
 
 --- 14 ---- YES
 DECLARE
@@ -283,6 +295,8 @@ DECLARE
             IS SELECT AUDITORIUM_NAME, AUDITORIUM_CAPACITY
             FROM AUDITORIUM WHERE AUDITORIUM_CAPACITY >= MIN_CAPACITY AND AUDITORIUM_CAPACITY <= MAX_CAPACITY;
     RECORD AUDITORIUM_CUR%ROWTYPE;
+     n INT;
+
 BEGIN
     OPEN AUDITORIUM_CUR(0, 20);
     FETCH AUDITORIUM_CUR INTO RECORD;
@@ -327,8 +341,12 @@ DBMS_OUTPUT.PUT_LINE('------------------------------');
     END LOOP;
     CLOSE AUDITORIUM_CUR;
 DBMS_OUTPUT.PUT_LINE('------------------------------');
-        FOR RECORD IN AUDITORIUM_CUR(81, 90)
+    SELECT MAX(AUDITORIUM_CAPACITY) INTO n FROM AUDITORIUM;
+        FOR RECORD IN AUDITORIUM_CUR(81, n)
             LOOP
+            IF RECORD.AUDITORIUM_NAME like '%??%'
+            then CONTINUE;
+                end if;
             DBMS_OUTPUT.PUT_LINE(
             ' ' || RECORD.AUDITORIUM_NAME ||
             ' ' || RECORD.AUDITORIUM_CAPACITY);
@@ -345,8 +363,10 @@ DECLARE
     TYPE TEACH_TYPE IS REF CURSOR RETURN TEACHER%ROWTYPE;
     XCURS TEACH_TYPE;
     RES_TEACHER TEACHER%rowtype;
+    param TEACHER.TEACHER_NAME%TYPE;
     BEGIN
-    OPEN XCURS FOR SELECT * FROM TEACHER;
+    param := 'Акунович Станислав Иванович';
+    OPEN XCURS FOR SELECT * FROM TEACHER WHERE TEACHER_NAME = param;
     FETCH XCURS INTO RES_TEACHER;
     WHILE (XCURS%FOUND)
     LOOP
